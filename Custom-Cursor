@@ -1,13 +1,9 @@
 local player = game.Players.LocalPlayer
 local tweenService = game:GetService("TweenService")
 local coreGui = game:GetService("CoreGui")
-local userInputService = game:GetService("UserInputService")
 local mouse = player:GetMouse()
 
 local tweenFast = TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-
--- Detecta se o jogador está no Mobile
-local isMobile = userInputService.TouchEnabled and not userInputService.KeyboardEnabled
 
 -- Remove instância antiga caso já exista
 if player.PlayerGui:FindFirstChild("zoewar_CrosshairGUI") then
@@ -22,35 +18,17 @@ sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 sg.IgnoreGuiInset = true
 sg.Parent = player.PlayerGui
 
--- Crosshair Fixa na Tela (Ideal para Mobile e suporte geral)
-local mobileCrosshair = Instance.new("ImageLabel", sg)
-mobileCrosshair.Name = "CenterScreenCrosshair"
-mobileCrosshair.AnchorPoint = Vector2.new(0.5, 0.5)
-mobileCrosshair.Position = UDim2.new(0.5, 0, 0.5, 0)
-mobileCrosshair.Size = UDim2.new(0, 36, 0, 36)
-mobileCrosshair.BackgroundTransparency = 1
-mobileCrosshair.Visible = false -- Fica visível só após escolher um ID ou no mobile
-mobileCrosshair.ZIndex = 10
-
 -- Frame do Submenu de Crosshair
 local crosshairFrame = Instance.new("Frame", sg)
 crosshairFrame.Name = "CrosshairMenu"
-
--- Adaptabilidade de Tamanho e Posição para Telas Pequenas (Mobile)
-if isMobile then
-    crosshairFrame.Size = UDim2.new(0, 260, 0, 340)
-    crosshairFrame.Position = UDim2.new(0.5, -130, 0.5, -170)
-else
-    crosshairFrame.Size = UDim2.new(0, 290, 0, 370)
-    crosshairFrame.Position = UDim2.new(0.5, -145, 0.5, -185)
-end
-
+crosshairFrame.Size = UDim2.new(0, 290, 0, 370)
+crosshairFrame.Position = UDim2.new(0.5, -145, 0.5, -185)
 crosshairFrame.BackgroundColor3 = Color3.fromRGB(10, 8, 14)
 crosshairFrame.BackgroundTransparency = 0.1
 crosshairFrame.BorderSizePixel = 0
 crosshairFrame.Visible = true
 crosshairFrame.Active = true
-crosshairFrame.Draggable = true -- Funciona para Touch e Mouse
+crosshairFrame.Draggable = true
 
 local cCorner = Instance.new("UICorner", crosshairFrame)
 cCorner.CornerRadius = UDim.new(0, 16)
@@ -83,19 +61,19 @@ local cTitle = Instance.new("TextLabel", crosshairFrame)
 cTitle.Size = UDim2.new(1, -45, 0, 46)
 cTitle.Position = UDim2.new(0, 14, 0, 0)
 cTitle.BackgroundTransparency = 1
-cTitle.Text = "🎯 Crosshair & Custom Cursor"
+cTitle.Text = "Cursor Changer Zoen🐈‍⬛"
 cTitle.TextColor3 = Color3.fromRGB(200, 200, 210)
 cTitle.Font = Enum.Font.GothamBold
-cTitle.TextSize = isMobile and 10.5 or 12
+cTitle.TextSize = 12
 cTitle.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Botão de Fechar
 local cClose = Instance.new("TextButton", crosshairFrame)
 cClose.Size = UDim2.new(0, 26, 0, 26)
-cClose.Position = UDim2.new(1, -34, 0, 10)
+cClose.Position = UDim2.new(1, -38, 0, 10)
 cClose.BackgroundColor3 = Color3.fromRGB(25, 18, 35)
 cClose.BackgroundTransparency = 0.2
-cClose.Text = "✕"
+cClose.Text = "X"
 cClose.TextColor3 = Color3.fromRGB(180, 170, 200)
 cClose.Font = Enum.Font.GothamBold
 cClose.TextSize = 10
@@ -145,18 +123,14 @@ applyShiftBtn.Font = Enum.Font.GothamBold
 applyShiftBtn.TextSize = 11.5
 Instance.new("UICorner", applyShiftBtn).CornerRadius = UDim.new(0, 10)
 
--- Função principal para aplicar o Cursor no PC, Mobile e nas UIs do Jogo
+-- Função para alterar a imagem do Crosshair na UI e o Cursor do Mouse no PC
 local function aplicarIdNoCrosshairMM2(id)
     local assetId = "rbxassetid://" .. id
 
-    -- 1. Mudar o ponteiro real do Mouse (PC)
+    -- Altera o cursor físico do Mouse no PC
     mouse.Icon = assetId
 
-    -- 2. Atualizar mira fixa no centro da tela (Mobile / Geral)
-    mobileCrosshair.Image = assetId
-    mobileCrosshair.Visible = true
-
-    -- 3. Alterar elementos de UI existentes no jogo (MM2, CoreGui e PlayerGui)
+    -- Altera os elementos de UI no jogo (MM2)
     task.spawn(function()
         pcall(function()
             for _, v in pairs(coreGui:GetDescendants()) do
@@ -190,13 +164,13 @@ end)
 
 -- Container com Scroll para os Presets
 local scrollPresets = Instance.new("ScrollingFrame", crosshairFrame)
-scrollPresets.Size = UDim2.new(1, -28, 0, isMobile and 160 or 190)
+scrollPresets.Size = UDim2.new(1, -28, 0, 190)
 scrollPresets.Position = UDim2.new(0, 14, 0, 138)
 scrollPresets.BackgroundColor3 = Color3.fromRGB(12, 9, 16)
 scrollPresets.BackgroundTransparency = 0.4
 scrollPresets.BorderSizePixel = 0
 scrollPresets.CanvasSize = UDim2.new(0, 0, 0, 720)
-scrollPresets.ScrollBarThickness = 3
+scrollPresets.ScrollBarThickness = 2.5
 scrollPresets.ScrollBarImageColor3 = Color3.fromRGB(140, 140, 150)
 Instance.new("UICorner", scrollPresets).CornerRadius = UDim.new(0, 10)
 
